@@ -1437,10 +1437,29 @@ function renderAdminTable(trainees) {
         btnDelete.innerText = 'Eliminar';
         btnDelete.addEventListener('click', () => {
             if (confirm(`¿Estás seguro de eliminar el registro de ${t.name}?`)) {
+                // 1. Eliminar de LocalDB por NIF
                 let allTrainees = LocalDB.getTrainees();
-                allTrainees.splice(index, 1);
-                LocalDB.saveTrainees(allTrainees);
-                renderAdminTable(allTrainees);
+                const localIndex = allTrainees.findIndex(item => item.nif === t.nif);
+                if (localIndex !== -1) {
+                    allTrainees.splice(localIndex, 1);
+                    LocalDB.saveTrainees(allTrainees);
+                }
+
+                // 2. Eliminar de Firebase Firestore si está activo
+                if (isFirebaseActive && db) {
+                    db.collection("trainees").doc(t.nif).delete()
+                        .then(() => {
+                            console.log(`Registro de ${t.name} eliminado de Firebase.`);
+                            loadAdminDashboardData();
+                        })
+                        .catch(err => {
+                            console.error("Error al eliminar alumno de Firebase:", err);
+                            alert("Error al eliminar de la base de datos en la nube.");
+                            loadAdminDashboardData();
+                        });
+                } else {
+                    renderAdminTable(allTrainees);
+                }
             }
         });
         cellActions.appendChild(btnDelete);
