@@ -1,0 +1,64 @@
+import codecs
+import re
+
+new_content = """        title: "5.3 Solicitud de Actual Propietario",
+        tag: "Lección 8",
+        content: `
+            <h3>Certificado de "Actual Propietario" y Privacidad</h3>
+            <p><strong>Objetivo del Módulo:</strong> Enseñar al analista a identificar escenarios donde el solicitante no es el titular original de la deuda, aplicando correctamente el modelo de "Actual Propietario" para garantizar el hermetismo de los datos bancarios.</p>
+            
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 2rem; text-align: center; font-weight: 500; letter-spacing: 2px;">[ INICIO DEL TRÁMITE ]</div>
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin-bottom: 1rem;">↓</div>
+
+            <h4>Lección 1: Identificación del Escenario (¿Cuándo usar este modelo?)</h4>
+            <p>El analista debe activar este protocolo cuando detecta una desconexión entre quién pide el documento y quién firmó el préstamo original.</p>
+            <ul>
+                <li><strong>Discrepancia en SIBIS:</strong> El solicitante (ej. Antonio) envía una petición indicando "soy titular de la vivienda", pero al buscar en el sistema SIBIS, el préstamo hipotecario figura a nombre de una empresa distinta (usualmente una Promotora o Inmobiliaria).</li>
+                <li><strong>La Prueba Irrefutable:</strong> En estos casos, la escritura original rara vez mencionará al nuevo dueño. La Nota Simple se vuelve el documento obligatorio y definitivo, ya que es el único respaldo legal que demuestra que el solicitante actual es, en efecto, el dueño legítimo de esa finca registral específica.</li>
+            </ul>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">↓</div>
+
+            <h4>Lección 2: La Regla de Oro de la Privacidad (Alerta LOPD)</h4>
+            <div class="alert-info" style="margin: 10px 0; padding: 12px; background-color: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); border-radius: 4px; color: #fca5a5;">
+                <strong>Emitir un certificado "Estándar" en este escenario es un error crítico de auditoría.</strong>
+            </div>
+            <ul>
+                <li><strong>Prohibición de Datos Cruzados:</strong> El actual propietario compró la casa, pero no firmó la hipoteca original. Por lo tanto, no tiene derecho legal a conocer los datos financieros del prestatario anterior.</li>
+                <li><strong>Riesgo Legal:</strong> Si el analista emite un certificado estándar mencionando los nombres o el NIF/DNI de los titulares originales (la constructora o dueños previos), el banco se expone a denuncias por vulneración de privacidad, ya que se estaría entregando información confidencial a un tercero sin autorización.</li>
+            </ul>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">↓</div>
+
+            <h4>Lección 3: Parametrización del Certificado (Paso a Paso)</h4>
+            <p>Para evitar la fuga de datos, se abandona el modelo unificado y se utiliza la plantilla específica denominada: <strong>"Certificado a petición de actual propietario de la finca"</strong>.</p>
+            <ul>
+                <li><strong>Paso 1: Fechas y Banco:</strong> Ingresa la fecha de concesión basándote en la fecha de la escritura original. Si el nombre del banco de origen no figura claramente, se borra el espacio o se estandariza a Banco Sabadell.</li>
+                <li><strong>Paso 2: Segmentación del Importe (Crucial):</strong> Dado que el préstamo original pudo ser de un promotor (con cientos de fincas y un capital de millones), NUNCA coloques el importe total del préstamo madre. Debes extraer y redactar únicamente el importe de responsabilidad hipotecaria específico de la finca que se está consultando (ej. 175,600 € correspondientes solo a la finca 6364).</li>
+                <li><strong>Paso 3: Redacción del Solicitante:</strong> Elimina cualquier mención a los titulares del préstamo en la cabecera. En el párrafo final del documento, ubica la sección "A petición de..." y coloca exclusivamente el nombre del solicitante actual, seguido de la coletilla: "en su condición de actual propietario de la finca" (tal cual lo respalda la nota simple).</li>
+            </ul>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">↓</div>
+
+            <h4>📋 Checklist de Auditoría Rápida: Actual Propietario</h4>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Filtro de Identidad:</strong> ¿El nombre en la solicitud (GT) difiere del titular original en SIBIS?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Validación de Propiedad:</strong> ¿La Nota Simple confirma que el solicitante es el dueño actual de la finca?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Selección de Plantilla:</strong> ¿Abrí el documento "Certificado a petición de actual propietario" en lugar del Unificado?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Filtro de Privacidad:</strong> ¿Me aseguré de que NO aparezca el nombre ni el NIF de la empresa/persona que tomó el préstamo originalmente?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Cruce de Importe:</strong> ¿El monto en euros refleja solo la porción de esa finca y no el total de la constructora?</li>
+            </ul>
+        `,
+"""
+
+with codecs.open('src/js/data.js', 'r', 'utf-8') as f:
+    content = f.read()
+
+match = re.search(r'title:\s*"5\.3 Solicitud del propietario actual",\s*tag:\s*"Lección 8",\s*content:\s*`(.*?)`,', content, flags=re.DOTALL)
+if match:
+    content = content[:match.start()] + new_content + content[match.end()-1:]
+    with codecs.open('src/js/data.js', 'w', 'utf-8') as f:
+        f.write(content)
+    print("Replaced Modulo 5.3 content")
+else:
+    print("Could not find Modulo 5.3")

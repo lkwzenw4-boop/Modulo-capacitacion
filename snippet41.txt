@@ -1,0 +1,76 @@
+4.1 Pólizas",
+        tag: "Lección 5",
+        content: `
+            <h3>Préstamos No Hipotecarios (Pólizas)</h3>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 2rem; text-align: center; font-weight: 500; letter-spacing: 2px;">[ INICIO DEL TRÁMITE ]</div>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin-bottom: 1rem;">↓</div>
+
+            <h4>PASO 1: Identificación y Filtro Inicial</h4>
+            <p><strong>Acción:</strong> Revisa la sección de situación y garantías en SIBIS.</p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Punto de control A:</strong> ¿El préstamo figura como cancelado por "amortización anticipada", "vencimiento" o "quita"?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Punto de control B:</strong> ¿La pestaña de garantías está completamente en blanco?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Punto de control C:</strong> ¿El documento principal adjunto en el Gestor Documental (GD) es una "póliza" o "contrato" (y no una nota simple)?</li>
+            </ul>
+            <div class="alert-info" style="margin: 10px 0; padding: 12px; background-color: rgba(239, 68, 68, 0.15); border-left: 4px solid var(--danger); border-radius: 4px; color: #fca5a5;">
+                <strong>Ruta de fallo:</strong> Si existen garantías grabadas, no es un préstamo de este tipo; se debe tratar como hipotecario.
+            </div>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">↓</div>
+
+            <h4>PASO 2: Control de Bloqueos y Contenciosos</h4>
+            <p><strong>Acción:</strong> Ingresa a Contrato > Datos Básicos en SIBIS para verificar el estado de la cuenta.</p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Punto de control:</strong> ¿El sistema lanza un aviso emergente de "bloqueado por contencioso"?</li>
+            </ul>
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: var(--radius-sm); border: 1px dashed var(--border-color);">
+                <p style="margin-bottom: 0.5rem;"><strong>🔀 DECISIÓN:</strong></p>
+                <ul style="list-style-type: none; padding-left: 1rem; margin-bottom: 0;">
+                    <li style="margin-bottom: 0.5rem;"><strong>➤ SI APARECE:</strong> Ingresa a la Ficha Cliente > Reporte de Morosidad para comprobar si el contencioso está regularizado o solucionado antes de continuar.</li>
+                    <li><strong>➤ NO APARECE:</strong> Se supera el filtro de riesgo y se procede a la redacción.</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">↓</div>
+
+            <h4>PASO 3: Parametrización del Certificado</h4>
+            <p><strong>Acción:</strong> Abre el modelo estándar para "préstamos no hipotecarios" (versión cancelación) y comienza la carga de datos.</p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Regla del Importe:</strong> El importe del capital se extrae directamente del límite establecido en el documento de la póliza, nunca de SIBIS (ya que no hay garantías).</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Regla de Avalistas:</strong> Elimina por completo la sección de avalistas del documento, salvo que la oficina haya solicitado explícitamente su inclusión en la plantilla.</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Regla del Solicitante:</strong> El certificado solo se emite a personas físicas. Si el préstamo está a nombre de una empresa, ingresa a Vínculos > Estructura en SIBIS y coloca como solicitante al primer administrador que figure en la lista.</li>
+            </ul>
+
+            <div style="text-align: center; color: var(--primary-light); font-size: 1.5rem; margin: 1.5rem 0 1rem 0;">↓</div>
+
+            <h4>PASO 4: Auditoría Cruzada y Cierre</h4>
+            <p><strong>Acción:</strong> Realiza el cruce de datos final entre tu borrador y el PDF de la póliza.</p>
+            <ul style="list-style-type: none; padding-left: 0;">
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Punto de control:</strong> ¿Coinciden exactamente el nombre del prestatario, la fecha de firma original y el importe del capital prestado?</li>
+                <li style="margin-bottom: 0.5rem;"><input type="checkbox" style="margin-right: 0.5rem;"><strong>Cierre:</strong> Aplica la firma digital en el PDF, guárdalo y resuelve el trámite en el sistema utilizando la coletilla de finalización estándar (Ej. "Préstamo finalizado...").</li>
+            </ul>
+        `,
+        checkpoints: [
+            {
+                question: "¿De dónde se debe extraer el importe del capital para un préstamo no hipotecario?",
+                options: [
+                    { text: "Directamente de la pestaña de garantías en SIBIS.", correct: false },
+                    { text: "Del límite establecido en el documento de la póliza.", correct: true },
+                    { text: "Del reporte de morosidad en Ficha Cliente.", correct: false },
+                    { text: "Del gestor documental de Certipress.", correct: false }
+                ]
+            },
+            {
+                question: "Si el préstamo no hipotecario está a nombre de una empresa, ¿a quién se emite el certificado?",
+                options: [
+                    { text: "A nombre de la misma empresa.", correct: false },
+                    { text: "Al primer administrador que figure en la lista de Vínculos > Estructura.", correct: true },
+                    { text: "A todos los socios de la empresa por igual.", correct: false },
+                    { text: "A la persona que haya solicitado el trámite desde la oficina.", correct: false }
+                ]
+            }
+        ]
+    },
+    {
+        moduleGroup: "

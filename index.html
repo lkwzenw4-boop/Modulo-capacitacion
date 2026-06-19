@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capacitación Interactiva SCC - Banco Sabadell</title>
+    <!-- Favicon / Estilos -->
+    <link rel="stylesheet" href="src/css/styles.min.css?v=4">
+    
+    <!-- Firebase App y Firestore (SDK versión 8) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <!-- HEADER PRINCIPAL -->
+        <header class="glass-panel" style="padding: 1rem 1.5rem; border-radius: var(--radius-sm); margin-bottom: 2rem;">
+            <div class="logo-container">
+                <button id="btn-sidebar-toggle" class="btn btn-secondary mobile-only" style="margin-right: 0.5rem; padding: 0.25rem 0.5rem; font-size: 1.2rem;">☰</button>
+                  <div class="logo-icon">BS</div>
+                <div class="app-title">
+                    <h1>Capacitación Trámite SCC</h1>
+                    <span>Administración de Préstamos - CR 3813</span>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button id="btn-settings-toggle" class="btn btn-secondary">⚙️ Ajustes</button>
+                <button id="btn-admin-toggle" class="btn btn-secondary">🛠️ Panel Admin</button>
+                <button id="btn-logout" class="btn btn-danger" style="display: none;">🔒 Salir</button>
+            </div>
+        </header>
+
+        <!-- CONTENEDOR DE VISTAS DINÁMICAS -->
+        <main class="view-container">
+
+            <!-- 1. VISTA DE REGISTRO / LOGIN -->
+            <section id="login-view" class="view-section active">
+                <div class="auth-card glass-panel">
+                    <div class="auth-header">
+                        <h2>Acceso de Alumno</h2>
+                        <p>Ingresa tus datos para registrar tu progreso en la capacitación de SCC</p>
+                    </div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="input-name">Nombre y Apellidos</label>
+                            <input type="text" id="input-name" class="form-input" placeholder="Ej. Juan Pérez" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-nif">Código de Empleado</label>
+                            <input type="text" id="input-nif" class="form-input" placeholder="Ej. 12345678X" required>
+                        </div>
+                        <p id="login-error-msg" style="color: var(--danger); font-size: 0.85rem; text-align: center; margin-top: 0.5rem; display: none;">❌ Acceso denegado: Código no autorizado.</p>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; font-size: 1rem;">
+                            Comenzar Capacitación 🚀
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 2. VISTA DEL CURSO / DASHBOARD -->
+            <section id="dashboard-view" class="view-section">
+                <div class="dashboard-grid">
+                    <!-- Lateral de navegación e info del alumno -->
+                    <aside class="sidebar-panel glass-panel">
+                        <div class="user-badge">
+                            <div class="avatar">👨‍🎓</div>
+                            <div class="user-info">
+                                <h3 id="user-display-name">Alumno</h3>
+                                <p id="user-display-nif">Código: -</p>
+                            </div>
+                        </div>
+                        <div class="progress-section">
+                            <div class="progress-stats">
+                                <span>Avance del Curso</span>
+                                <span id="progress-percentage">0%</span>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div id="progress-bar" class="progress-bar"></div>
+                            </div>
+                        </div>
+                        <div class="sidebar-search" style="padding: 1rem 1.5rem 0 1.5rem;">
+                            <input type="text" id="global-search-input" placeholder="🔍 Buscar términos..." style="width: 100%; padding: 0.6rem; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: var(--text-main); font-family: inherit; margin-bottom: 0.5rem;">
+                        </div>
+                        <div class="module-nav-list" id="module-list-container">
+                            <!-- Los módulos se renderizan con JS -->
+                        </div>
+                        <button id="btn-sidebar-exam" class="btn btn-primary locked" style="margin-top: auto; padding: 1rem; font-weight: 600;">
+                            🔒 Examen Final (Completar Módulos)
+                        </button>
+                    </aside>
+
+                    <!-- Panel Central de Lectura y Aprendizaje -->
+                    <article class="content-panel glass-panel">
+                        <div class="module-header">
+                            <span class="module-tag" id="module-tag">Módulo 1</span>
+                            <h2 id="module-title">Cargando Módulo...</h2>
+                        </div>
+                        <div class="module-body" id="module-content-body">
+                            <!-- Contenido inyectado dinámicamente con JS -->
+                        </div>
+                        
+                        <!-- Mini-checkpoint o desafío rápido al final del módulo -->
+                        <div id="checkpoint-container">
+                            <!-- Checkpoint dinámico -->
+                        </div>
+
+                        <div class="module-actions">
+                            <button id="btn-prev-module" class="btn btn-secondary" disabled>⬅️ Tema Anterior</button>
+                            <button id="btn-next-module" class="btn btn-secondary">Siguiente Tema ➡️</button>
+                            <button id="btn-start-exam" class="btn btn-primary" style="display: none;">📝 Ir al Examen Final</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- 3. VISTA DE EXAMEN FINAL -->
+            <section id="exam-view" class="view-section">
+                <div class="exam-layout glass-panel">
+                    <div class="exam-header">
+                        <div class="exam-title">
+                            <h2>Evaluación de Capacitación SCC</h2>
+                        </div>
+                        <div class="exam-meta">
+                            Pregunta <span id="current-question-num">1</span> de <span id="total-questions-num">10</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenedor de Pregunta -->
+                    <div id="exam-question-card" class="question-card">
+                        <!-- Preguntas y opciones se renderizan con JS -->
+                    </div>
+
+                    <div class="exam-actions">
+                        <button id="btn-prev-question" class="btn btn-secondary">⬅️ Pregunta Anterior</button>
+                        <button id="btn-next-question" class="btn btn-secondary">Siguiente Pregunta ➡️</button>
+                        <button id="btn-submit-exam" class="btn btn-primary" style="display: none;">Enviar Examen 🎓</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. VISTA DE RESULTADOS Y DIPLOMA -->
+            <section id="result-view" class="view-section">
+                <div class="result-card glass-panel">
+                    <div id="result-icon" class="result-icon">🏆</div>
+                    <h2 id="result-title">Procesando...</h2>
+                    <span id="score-badge" class="score-badge">Calificación: -</span>
+                    <p id="result-desc">Cargando resultados...</p>
+
+                    <!-- Previsualización del Diploma Aprobado -->
+                    <div id="diploma-preview-container" class="diploma-preview" style="display: none;">
+                        <h3 style="font-size: 1.15rem; color: var(--text-main);">Tu Certificado Digital</h3>
+                        <img id="diploma-preview-img" src="" alt="Diploma de Aprobación" class="diploma-thumb">
+                        <canvas id="diplomaCanvas"></canvas>
+                    </div>
+
+                    <div style="display: flex; justify-content: center; gap: 1rem;">
+                        <button id="btn-download-diploma" class="btn btn-primary" style="display: none;">
+                            📥 Descargar Certificado (PNG)
+                        </button>
+                        <button id="btn-restart-course" class="btn btn-danger" style="display: none;">
+                            🔄 Repasar Módulos y Reintentar Examen
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. VISTA DE ADMINISTRACIÓN -->
+            <section id="admin-view" class="view-section">
+                <div class="admin-header">
+                    <h2>Panel de Control de Capacitación</h2>
+                    <button class="btn btn-secondary" onclick="loadAdminDashboardData()">🔄 Actualizar Datos</button>
+                </div>
+                
+                <div class="admin-grid">
+                    <div class="admin-sidebar-col" style="display: flex; flex-direction: column; gap: 2rem;">
+                        <!-- Estadísticas generales -->
+                        <div class="admin-stats-container">
+                            <div class="stat-box glass-panel">
+                                <div class="stat-val" id="stat-total-trainees">0</div>
+                                <div class="stat-label">Total Alumnos</div>
+                            </div>
+                            <div class="stat-box glass-panel" style="border-color: rgba(16, 185, 129, 0.2);">
+                                <div class="stat-val" id="stat-passed-trainees" style="color: var(--success);">0</div>
+                                <div class="stat-label">Aprobados (>=80%)</div>
+                            </div>
+                            <div class="stat-box glass-panel" style="border-color: rgba(245, 158, 11, 0.2);">
+                                <div class="stat-val" id="stat-inprogress-trainees" style="color: var(--warning);">0</div>
+                                <div class="stat-label">En Progreso</div>
+                            </div>
+                            <div class="stat-box glass-panel" style="border-color: rgba(59, 130, 246, 0.2);">
+                                <div class="stat-val" id="stat-avg-score" style="color: var(--primary-light);">0</div>
+                                <div class="stat-label">Nota Promedio</div>
+                            </div>
+                        </div>
+
+                        <!-- Lista Blanca / Control de Acceso -->
+                        <div class="admin-whitelist-container glass-panel" style="padding: 1.25rem;">
+                            <h4 style="margin-bottom: 1rem; font-size: 1rem;">Accesos Permitidos</h4>
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                                <input type="text" id="input-whitelist-code" class="form-input" placeholder="Código Empleado" style="padding: 0.5rem; font-size: 0.85rem;">
+                                <button id="btn-add-whitelist" class="btn btn-primary" style="padding: 0.5rem; font-size: 0.85rem;">+</button>
+                            </div>
+                            <ul id="whitelist-list" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; max-height: 200px; overflow-y: auto;">
+                                <!-- Elementos inyectados por JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Alumnos -->
+                    <div class="admin-table-container glass-panel">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                            <h3 style="margin: 0;">Seguimiento de Alumnos</h3>
+                            <button id="btn-export-csv" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">📥 Exportar CSV</button>
+                        </div>
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre del Alumno</th>
+                                    <th>Código de Empleado</th>
+                                    <th>Progreso Módulos</th>
+                                    <th>Resultado Examen</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body">
+                                <!-- Filas inyectadas con JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER DE PÁGINA -->
+        <footer>
+            <div id="firebase-status-indicator" style="margin-bottom: 1rem;">
+                <!-- Indicador de base de datos -->
+            </div>
+            <p>© 2026 Especialización Trámite SCC - Centro Resolutor 3813</p>
+            <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.25rem;">Desarrollado para uso exclusivo del personal de Administración de Préstamos .</p>
+        </footer>
+    </div>
+
+    <!-- MODAL 1: CONTRASEÑA DE ADMINISTRADOR -->
+    <div id="admin-password-modal" class="modal-overlay">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Acceso Administrador</h3>
+                <button id="close-admin-modal" class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="input-admin-pass">Ingresa la contraseña de administración</label>
+                <input type="password" id="input-admin-pass" class="form-input" placeholder="Contraseña...">
+                <p id="admin-pass-error" style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem; display: none;">
+                    ❌ Contraseña incorrecta. Inténtalo de nuevo.
+                </p>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+                <button id="btn-confirm-admin-pass" class="btn btn-primary">Acceder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE DETALLES DEL ALUMNO -->
+    <div id="admin-student-details-modal" class="modal-overlay">
+        <div class="modal-content glass-panel" style="max-width: 600px; max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3 id="details-modal-title">Detalles del Alumno</h3>
+                <button id="close-student-details-modal" class="close-modal">&times;</button>
+            </div>
+            
+            <div class="details-section" style="margin-bottom: 1.5rem;">
+                <h4 style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">Estadísticas del Examen</h4>
+                <p><strong>Intentos Totales:</strong> <span id="detail-exam-attempts">0</span></p>
+                <p><strong>Tiempo Último Examen:</strong> <span id="detail-exam-time">0</span> segundos</p>
+            </div>
+
+            <div class="details-section" style="margin-bottom: 1.5rem;">
+                <h4 style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">Tiempos por Módulo</h4>
+                <table class="admin-table" style="width: 100%;">
+                    <thead>
+                        <tr><th style="text-align: left;">Módulo</th><th style="text-align: left;">Tiempo</th></tr>
+                    </thead>
+                    <tbody id="detail-module-times">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="details-section">
+                <h4 style="border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1rem;">Historial de Inicios de Sesión</h4>
+                <ul id="detail-login-sessions" style="list-style: none; font-size: 0.9rem; max-height: 150px; overflow-y: auto; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: CONFIGURACIÓN / AJUSTES (Firebase y Contraseña) -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content glass-panel" style="max-width: 550px;">
+            <div class="modal-header">
+                <h3>Ajustes del Sistema</h3>
+                <button id="close-settings-modal" class="close-modal">&times;</button>
+            </div>
+            
+            <!-- Contraseña de Admin -->
+            <div class="form-group">
+                <label for="setting-admin-pass">Nueva Contraseña del Administrador</label>
+                <input type="text" id="setting-admin-pass" class="form-input" placeholder="Defecto: admin123">
+            </div>
+
+            <!-- Firebase Switch -->
+            <div class="toggle-container">
+                <div class="toggle-label">
+                    <h4>Conectar a Firebase Firestore</h4>
+                    <p>Sincroniza el progreso en la nube de forma segura y en tiempo real.</p>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="toggle-firebase">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- Configuración JSON Firebase -->
+            <div class="form-group" id="firebase-config-area" style="display: none;">
+                <label for="setting-firebase-config">Pegar Configuración de Firebase (JSON)</label>
+                <textarea id="setting-firebase-config" class="form-input" rows="8" style="font-family: monospace; font-size: 0.85rem; resize: vertical;"></textarea>
+                <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; line-height: 1.4;">
+                    Obtén este objeto JSON desde la Consola de Firebase &gt; Configuración del Proyecto &gt; Tus Aplicaciones (Web).
+                </p>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 2rem;">
+                <button id="btn-save-settings" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cargar archivo principal de Javascript -->
+    <script src="src/js/data.min.js?v=4"></script>
+    <script src="src/js/app.min.js?v=4"></script>
+</body>
+</html>

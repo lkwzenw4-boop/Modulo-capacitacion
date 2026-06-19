@@ -1,0 +1,162 @@
+<div style="column-count: 2; column-gap: 20px; font-size: 0.85em;">
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Amortización</strong>
+        <span style="color: var(--text-muted);">También llamado reembolso. Es la devolución anticipada de una parte del préstamo hipotecario. Puede ser total o parcial.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Avalista</strong>
+        <span style="color: var(--text-muted);">Es una persona o entidad que se compromete a pagar una deuda si la persona a quien avala no puede hacerlo.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Bastanteo de poderes</strong>
+        <span style="color: var(--text-muted);">Es un documento que verifica que una persona o entidad tiene la capacidad de actuar en nombre de otra.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Capital</strong>
+        <span style="color: var(--text-muted);">El monto de dinero que se presta.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Carga</strong>
+        <span style="color: var(--text-muted);">Una limitación o deuda que afecta a una propiedad (ej. hipotecas, embargos).</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Carta parcial de pago</strong>
+        <span style="color: var(--text-muted);">Documento que reconoce que se ha hecho un pago parcial de una deuda.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Certificado de saldo cero</strong>
+        <span style="color: var(--text-muted);">Documento que acredita que no se tienen deudas con un banco.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Certificado de últimas voluntades</strong>
+        <span style="color: var(--text-muted);">Documento que acredita si una persona fallecida dejó testamento y ante qué notario.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Dación en pago</strong>
+        <span style="color: var(--text-muted);">Acto jurídico donde el deudor entrega un bien al acreedor para saldar una deuda.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Declaración de herederos abintestato</strong>
+        <span style="color: var(--text-muted);">Documento que establece quiénes son los herederos de una persona que falleció sin testamento.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">División horizontal</strong>
+        <span style="color: var(--text-muted);">Acto jurídico que permite dividir un edificio en varias unidades independientes. La matriz desaparece.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Escritura de préstamo hipotecario</strong>
+        <span style="color: var(--text-muted);">Documento oficial donde se exponen las cláusulas y condiciones pactadas.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Euribor</strong>
+        <span style="color: var(--text-muted);">Índice de referencia del mercado interbancario de Europa.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Expediente de riesgos (ER)</strong>
+        <span style="color: var(--text-muted);">Información financiera y personal analizada para aprobar una solicitud.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Extinción de condominio</strong>
+        <span style="color: var(--text-muted);">Procedimiento legal que finaliza la copropiedad de un bien inmueble.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">FEIN</strong>
+        <span style="color: var(--text-muted);">Ficha Europea de Información Normalizada. Contiene toda la información de la hipoteca.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Finca registral</strong>
+        <span style="color: var(--text-muted);">Unidad de suelo o edificación inscrita en el Registro de la Propiedad.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Hipoteca</strong>
+        <span style="color: var(--text-muted);">Acuerdo entre un prestamista y un deudor con derecho sobre una propiedad en caso de impago.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Hipotecante no deudor</strong>
+        <span style="color: var(--text-muted);">Persona que garantiza la deuda de un tercero con su inmueble, sin recibir el dinero.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Hipoteca unilateral</strong>
+        <span style="color: var(--text-muted);">Hipoteca voluntaria constituida por el propietario sin acuerdo previo con el acreedor.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">LCCI</strong>
+        <span style="color: var(--text-muted);">Ley de Contratos de Crédito Inmobiliario.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Leasing</strong>
+        <span style="color: var(--text-muted);">Contrato de arrendamiento financiero con opción a compra.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">LOPD</strong>
+        <span style="color: var(--text-muted);">Ley Orgánica de Protección de Datos.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Nota simple</strong>
+        <span style="color: var(--text-muted);">Documento que contiene información básica sobre un inmueble (titularidad, cargas).</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Novación de préstamo</strong>
+        <span style="color: var(--text-muted);">Acuerdo para modificar las condiciones de un préstamo ya contratado.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Nuda propiedad</strong>
+        <span style="color: var(--text-muted);">Derecho real sobre una cosa sin el derecho a usar o disfrutar de ella (usufructo).</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Oferta vinculante</strong>
+        <span style="color: var(--text-muted);">Acuerdo por escrito que establece las condiciones inmodificables de un préstamo.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Préstamo a tipo variable</strong>
+        <span style="color: var(--text-muted);">Préstamo donde el tipo de interés puede variar.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Préstamo a tipo fijo</strong>
+        <span style="color: var(--text-muted);">Préstamo donde el tipo de interés no varía.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Préstamo mixto</strong>
+        <span style="color: var(--text-muted);">Combina un tipo de interés fijo y otro variable.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Préstamo en divisas</strong>
+        <span style="color: var(--text-muted);">Financiamiento en una moneda distinta al euro.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Préstamo promotor</strong>
+        <span style="color: var(--text-muted);">Otorgado a promotores para proyectos de construcción.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Prestatario</strong>
+        <span style="color: var(--text-muted);">Persona o entidad que solicita un préstamo.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Provisión de fondos</strong>
+        <span style="color: var(--text-muted);">Dinero entregado por adelantado para cubrir gastos futuros.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Registro de la Propiedad</strong>
+        <span style="color: var(--text-muted);">Servicio público que registra los actos y contratos sobre inmuebles.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Responsabilidad hipotecaria</strong>
+        <span style="color: var(--text-muted);">Cantidad máxima (capital, intereses, costas) a pagar por un préstamo.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Segregación de fincas</strong>
+        <span style="color: var(--text-muted);">Divide una propiedad en fincas independientes. La finca matriz continúa existiendo.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Subrogación</strong>
+        <span style="color: var(--text-muted);">Sustitución de una de las partes (Acreedor o Deudor) en un préstamo.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Tasación</strong>
+        <span style="color: var(--text-muted);">Valoración económica de un inmueble realizada por empresa homologada.</span>
+    </div>
+    <div style="break-inside: avoid; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px; border-left: 3px solid var(--primary-light);">
+        <strong style="color: var(--primary-light); display: block; margin-bottom: 4px;">Tipo de interés</strong>
+        <span style="color: var(--text-muted);">Porcentaje que se cobra por pedir un préstamo.</span>
+    </div>
+</div>

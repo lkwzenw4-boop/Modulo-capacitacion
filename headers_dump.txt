@@ -1,0 +1,51 @@
+<h3>Introducción General</h3>
+<h4>¿Qué es el sistema SCC y para qué sirve?</h4>
+<h4>Cómo ingresar (VPN → Citrix → CVIS)</h4>
+<h4>Módulos que se usan</h4>
+<h4>Cómo filtrar trámites</h4>
+<h4>Tipos de certificados que existen</h4>
+<h4>Estados del trámite</h4>
+<h4>Tiempos de resolución y plazos</h4>
+<h4>Clientes prioritarios (CP)</h4>
+<h3>Auditoría y Emisión de Certificados Bancarios</h3>
+<h4>Triaje y Clasificación del Trámite</h4>
+<h4>Reglas de Confidencialidad</h4>
+<h4>Lectura Estratégica de Escrituras (La Prueba de Fuego)</h4>
+<h4>Cierre, Formato y Emisión</h4>
+<h3>Guía Interactiva: Emisión del Certificado Unificado / Estándar</h3>
+<h4>PARTE 1 — A LA CAZA DEL TRÁMITE (Asignación)</h4>
+<h4>PARTE 2 — MODO DETECTIVE (Validación del Préstamo)</h4>
+<h4>PARTE 3 — ELIGIENDO EL MOLDE CORRECTO</h4>
+<h4>PARTE 4 — CREACIÓN DEL DOCUMENTO OFICIAL</h4>
+<h4>PARTE 5 — CIERRE CON BROCHE DE ORO</h4>
+<h3 style="margin-top: 0;">📋 REFERENCIA RÁPIDA: ESTADOS DEL TRÁMITE</h3>
+<h3>Certificado NO Estándar</h3>
+<h3>Entidades Absorbidas (Grupo Sabadell)</h3>
+<h3>Certificados Automáticos</h3>
+<h3>Préstamos cancelados antes del 28/11/2006 (Ley 36/2006)</h3>
+<h3>Certificados "Saldo Cero" (Modelos 2006)</h3>
+<h4>Fase 1: Triaje de Documentos Obligatorios</h4>
+<h4>Fase 2: Cruce de Datos (Certipress vs. Nota Simple)</h4>
+<h4>Fase 3: Extracción de Datos para la Plantilla</h4>
+<h4>Fase 4: Cierre y Emisión Manual</h4>
+<h3>Préstamos No Hipotecarios (Pólizas)</h3>
+<h4>PASO 1: Identificación y Filtro Inicial</h4>
+<h4>PASO 2: Control de Bloqueos y Contenciosos</h4>
+<h4>PASO 3: Parametrización del Certificado</h4>
+<h4>PASO 4: Auditoría Cruzada y Cierre</h4>
+<h3>Hipoteca Personal (Línea)</h3>
+<h3>Cancelación de una sola finca (Varias garantías)</h3>
+<h3>Solicitud del propietario actual (No titular)</h3>
+<h3>Hipoteca de Máximos</h3>
+<h3>Préstamos en Divisas</h3>
+<h3>Solicitud de Herederos</h3>
+<h3>Préstamos en situación de Contencioso</h3>
+<h3>Subrogación de Acreedor</h3>
+<h3>Subrogación de Deudor (No Intervención BS)</h3>
+<h3>Garantía sobre Fondo de Comercio / Hipoteca Mobiliaria</h3>
+<h3>Préstamos NO Hipotecarios (Personales)</h3>
+<h3>Textos Estándar (Coletillas) para Finalizar Trámites</h3>
+<h4 style="margin-top: 0; color: var(--success);">Trámites Finalizados Correctamente</h4>
+<h4 style="margin-top: 0; color: var(--warning);">Falta de Datos o Error de Ruta</h4>
+<h4 style="margin-top: 0; color: var(--danger);">Devolución Directa (Trámite No Realizado)</h4>
+<h3>Glosario de Términos - Certificados</h3>

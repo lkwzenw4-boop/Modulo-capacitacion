@@ -1,0 +1,9 @@
+# Ignorar videos pesados de capacitación
+src/assets/videos/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
+dist/
