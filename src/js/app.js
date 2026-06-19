@@ -270,12 +270,10 @@ function showView(viewId) {
     // Mostrar/ocultar botones del header según la vista
     const logoutBtn = document.getElementById('btn-logout');
     const adminToggle = document.getElementById('btn-admin-toggle');
-    const settingsBtn = document.getElementById('btn-settings-toggle');
 
     if (viewId === 'login-view') {
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (adminToggle) adminToggle.style.display = 'flex';
-        if (settingsBtn) settingsBtn.style.display = 'none';
     } else if (viewId === 'admin-view') {
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (adminToggle) {
@@ -284,7 +282,6 @@ function showView(viewId) {
             adminToggle.classList.remove('btn-secondary');
             adminToggle.classList.add('btn-primary');
         }
-        if (settingsBtn) settingsBtn.style.display = 'flex';
     } else {
         // Alumno en curso
         if (logoutBtn) logoutBtn.style.display = 'flex';
@@ -294,7 +291,6 @@ function showView(viewId) {
             adminToggle.classList.remove('btn-primary');
             adminToggle.classList.add('btn-secondary');
         }
-        if (settingsBtn) settingsBtn.style.display = 'none';
     }
 }
 
