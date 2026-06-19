@@ -194,6 +194,7 @@ function loadTraineeProgress() {
                 if (doc.exists) {
                     const data = doc.data();
                     Object.assign(currentUser, {
+                        name: data.name || currentUser.name,
                         progress: data.progress || 0,
                         score: data.score !== undefined ? data.score : null,
                         approved: data.approved || false,
@@ -240,6 +241,7 @@ function loadLocalProgress() {
     const local = trainees.find(t => t.nif === currentUser.nif);
     if (local) {
         Object.assign(currentUser, {
+            name: local.name || currentUser.name,
             progress: local.progress || 0,
             score: local.score !== undefined ? local.score : null,
             approved: local.approved || false,
