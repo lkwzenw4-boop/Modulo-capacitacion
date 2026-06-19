@@ -203,8 +203,26 @@ function loadTraineeProgress() {
                     });
                     sessionStorage.setItem('scc_current_user', JSON.stringify(currentUser));
                     updateUIForProgress();
+
+                    // Cargar módulo o resultados correspondientes
+                    if (currentUser.score !== null) {
+                        renderResults(currentUser.score, currentUser.approved);
+                    } else {
+                        let activeIndex = 0;
+                        for (let index = 0; index < modules.length; index++) {
+                            const threshold = (index / modules.length) * 100;
+                            const isUnlocked = index === 0 || (currentUser.progress >= threshold - 1);
+                            if (isUnlocked) {
+                                activeIndex = index;
+                            } else {
+                                break;
+                            }
+                        }
+                        loadModule(activeIndex);
+                    }
                 } else {
                     saveCurrentUserToDB();
+                    loadModule(0);
                 }
             })
             .catch((error) => {
@@ -232,6 +250,23 @@ function loadLocalProgress() {
         sessionStorage.setItem('scc_current_user', JSON.stringify(currentUser));
     }
     updateUIForProgress();
+
+    // Cargar módulo o resultados correspondientes
+    if (currentUser.score !== null) {
+        renderResults(currentUser.score, currentUser.approved);
+    } else {
+        let activeIndex = 0;
+        for (let index = 0; index < modules.length; index++) {
+            const threshold = (index / modules.length) * 100;
+            const isUnlocked = index === 0 || (currentUser.progress >= threshold - 1);
+            if (isUnlocked) {
+                activeIndex = index;
+            } else {
+                break;
+            }
+        }
+        loadModule(activeIndex);
+    }
 }
 
 function saveCurrentUserToDB() {
@@ -446,20 +481,95 @@ function setupEventListeners() {
             
             errorMsg.style.display = 'none';
 
-            // Guardar en la base de datos local y/o sesión
-            currentUser = LocalDB.addTrainee(name, nif);
-            
+            // Guardar en la base de datos local y/o sesión de forma segura sin sobreescribir
+            let traineeData = null;
+            if (isFirebaseActive && db) {
+                try {
+                    const traineeDoc = await db.collection("trainees").doc(nif).get();
+                    if (traineeDoc.exists) {
+                        traineeData = traineeDoc.data();
+                        console.log("Progreso existente cargado desde Firebase.");
+                    }
+                } catch (err) {
+                    console.error("Error al buscar progreso en Firebase:", err);
+                }
+            }
+
+            if (!traineeData) {
+                const trainees = LocalDB.getTrainees();
+                const existing = trainees.find(t => t.nif === nif);
+                if (existing) {
+                    traineeData = existing;
+                    console.log("Progreso existente cargado desde LocalDB.");
+                }
+            }
+
+            if (traineeData) {
+                currentUser = {
+                    name: traineeData.name || name,
+                    nif: nif,
+                    progress: traineeData.progress || 0,
+                    score: traineeData.score !== undefined ? traineeData.score : null,
+                    approved: traineeData.approved || false,
+                    examAttempts: traineeData.examAttempts || 0,
+                    examTimeSeconds: traineeData.examTimeSeconds || 0,
+                    moduleTimes: traineeData.moduleTimes || {},
+                    loginSessions: traineeData.loginSessions || []
+                };
+            } else {
+                currentUser = {
+                    name: name,
+                    nif: nif,
+                    progress: 0,
+                    score: null,
+                    approved: false,
+                    examAttempts: 0,
+                    examTimeSeconds: 0,
+                    moduleTimes: {},
+                    loginSessions: []
+                };
+            }
+
             // Registrar sesión
             if (!currentUser.loginSessions) currentUser.loginSessions = [];
             currentUser.loginSessions.push(new Date().toLocaleString('es-ES'));
-            saveCurrentUserToDB();
 
+            // Guardar en LocalDB
+            const allTrainees = LocalDB.getTrainees();
+            const idx = allTrainees.findIndex(t => t.nif === nif);
+            if (idx !== -1) {
+                allTrainees[idx] = currentUser;
+            } else {
+                allTrainees.push(currentUser);
+            }
+            LocalDB.saveTrainees(allTrainees);
+
+            // Guardar en Firebase y SessionStorage
+            saveCurrentUserToDB();
             sessionStorage.setItem('scc_current_user', JSON.stringify(currentUser));
+
             showView('dashboard-view');
-            loadTraineeProgress();
-            
+            updateUIForProgress();
+
+            // Cargar el módulo correspondiente o el examen
+            if (currentUser.score !== null) {
+                renderResults(currentUser.score, currentUser.approved);
+            } else {
+                let activeIndex = 0;
+                for (let index = 0; index < modules.length; index++) {
+                    const threshold = (index / modules.length) * 100;
+                    const isUnlocked = index === 0 || (currentUser.progress >= threshold - 1);
+                    if (isUnlocked) {
+                        activeIndex = index;
+                    } else {
+                        break;
+                    }
+                }
+                loadModule(activeIndex);
+            }
+
             moduleStartTime = Date.now();
-            
+
             // Limpiar inputs
             document.getElementById('input-name').value = '';
             document.getElementById('input-nif').value = '';
