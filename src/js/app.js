@@ -275,7 +275,7 @@ function showView(viewId) {
     if (viewId === 'login-view') {
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (adminToggle) adminToggle.style.display = 'flex';
-        if (settingsBtn) settingsBtn.style.display = 'flex';
+        if (settingsBtn) settingsBtn.style.display = 'none';
     } else if (viewId === 'admin-view') {
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (adminToggle) {
