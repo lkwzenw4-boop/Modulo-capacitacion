@@ -183,6 +183,19 @@ function checkAppSession() {
     }
 }
 
+// Helper para verificar si un módulo está desbloqueado
+function isModuleUnlocked(index) {
+    if (!currentUser) return index === 0;
+    // Admin override para Arnold (3693)
+    if (currentUser.nif === '3693' && currentUser.name.toUpperCase() === 'ARNOLD') {
+        return true;
+    }
+    const threshold = (index / modules.length) * 100;
+    let unlocked = index === 0 || (currentUser.progress >= threshold - 1);
+    if (!modules[index].checkpoints) unlocked = true; // Anexos siempre desbloqueados
+    return unlocked;
+}
+
 // Cargar el progreso en tiempo real del alumno
 function loadTraineeProgress() {
     if (!currentUser) return;
@@ -212,9 +225,7 @@ function loadTraineeProgress() {
                     } else {
                         let activeIndex = 0;
                         for (let index = 0; index < modules.length; index++) {
-                            const threshold = (index / modules.length) * 100;
-                            const isUnlocked = index === 0 || (currentUser.progress >= threshold - 1);
-                            if (isUnlocked) {
+                            if (isModuleUnlocked(index)) {
                                 activeIndex = index;
                             } else {
                                 break;
@@ -260,9 +271,7 @@ function loadLocalProgress() {
     } else {
         let activeIndex = 0;
         for (let index = 0; index < modules.length; index++) {
-            const threshold = (index / modules.length) * 100;
-            const isUnlocked = index === 0 || (currentUser.progress >= threshold - 1);
-            if (isUnlocked) {
+            if (isModuleUnlocked(index)) {
                 activeIndex = index;
             } else {
                 break;
@@ -275,6 +284,17 @@ function loadLocalProgress() {
 function saveCurrentUserToDB() {
     if (!currentUser) return;
     sessionStorage.setItem('scc_current_user', JSON.stringify(currentUser));
+
+    // Siempre guardar en LocalDB como respaldo local
+    LocalDB.updateTraineeProgress(currentUser.nif, {
+        progress: currentUser.progress,
+        score: currentUser.score,
+        approved: currentUser.approved,
+        examAttempts: currentUser.examAttempts,
+        examTimeSeconds: currentUser.examTimeSeconds,
+        moduleTimes: currentUser.moduleTimes,
+        loginSessions: currentUser.loginSessions
+    });
 
     if (isFirebaseActive && db) {
         db.collection("trainees").doc(currentUser.nif).set({
@@ -291,16 +311,6 @@ function saveCurrentUserToDB() {
         }, { merge: true })
         .then(() => console.log("Progreso guardado en Firebase Firestore."))
         .catch(error => console.error("Error al guardar en Firebase Firestore:", error));
-    } else {
-        LocalDB.updateTraineeProgress(currentUser.nif, {
-            progress: currentUser.progress,
-            score: currentUser.score,
-            approved: currentUser.approved,
-            examAttempts: currentUser.examAttempts,
-            examTimeSeconds: currentUser.examTimeSeconds,
-            moduleTimes: currentUser.moduleTimes,
-            loginSessions: currentUser.loginSessions
-        });
     }
 }
 
@@ -509,7 +519,7 @@ function setupEventListeners() {
 
             if (traineeData) {
                 currentUser = {
-                    name: traineeData.name || name,
+                    name: traineeData.name ? traineeData.name : name,
                     nif: nif,
                     progress: traineeData.progress || 0,
                     score: traineeData.score !== undefined ? traineeData.score : null,
@@ -560,9 +570,7 @@ function setupEventListeners() {
             } else {
                 let activeIndex = 0;
                 for (let index = 0; index < modules.length; index++) {
-                    const threshold = (index / modules.length) * 100;
-                    const isUnlocked = index === 0 || (currentUser.progress >= threshold - 1);
-                    if (isUnlocked) {
+                    if (isModuleUnlocked(index)) {
                         activeIndex = index;
                     } else {
                         break;
@@ -823,10 +831,7 @@ function renderSidebarNav() {
 
             const item = document.createElement('div');
             item.className = 'module-nav-item';
-            
-            const threshold = (index / modules.length) * 100;
-            let isUnlocked = index === 0 || (currentUser && currentUser.progress >= threshold - 1);
-            if (!mod.checkpoints) isUnlocked = true; // Anexos siempre desbloqueados
+            const isUnlocked = isModuleUnlocked(index);
             const isCompleted = currentUser && currentUser.progress >= (((index + 1) / modules.length) * 100 - 1);
             
             item.dataset.index = index;
@@ -1437,6 +1442,11 @@ function renderWhitelistAdmin() {
         li.innerHTML = `<span>${code}</span> <button class="btn btn-danger" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">X</button>`;
         li.querySelector('button').addEventListener('click', () => {
             LocalDB.removeWhitelist(code);
+            if (isFirebaseActive && db) {
+                db.collection("config").doc("whitelist").set({
+                    codes: LocalDB.getWhitelist()
+                }, { merge: true }).catch(console.error);
+            }
             renderWhitelistAdmin();
         });
         ul.appendChild(li);
@@ -1451,6 +1461,11 @@ function renderWhitelistAdmin() {
         const code = input.value.trim().toUpperCase();
         if (code) {
             LocalDB.addWhitelist(code);
+            if (isFirebaseActive && db) {
+                db.collection("config").doc("whitelist").set({
+                    codes: LocalDB.getWhitelist()
+                }, { merge: true }).catch(console.error);
+            }
             input.value = '';
             renderWhitelistAdmin();
         }
@@ -1547,20 +1562,20 @@ function renderAdminTable(trainees) {
                     LocalDB.saveTrainees(allTrainees);
                 }
 
-                // 2. Eliminar de Firebase Firestore si está activo
+                // 2. Optimistic UI update
+                renderAdminTable(allTrainees);
+
+                // 3. Eliminar de Firebase Firestore si está activo
                 if (isFirebaseActive && db) {
                     db.collection("trainees").doc(t.nif).delete()
                         .then(() => {
                             console.log(`Registro de ${t.name} eliminado de Firebase.`);
-                            loadAdminDashboardData();
                         })
                         .catch(err => {
                             console.error("Error al eliminar alumno de Firebase:", err);
                             alert("Error al eliminar de la base de datos en la nube.");
-                            loadAdminDashboardData();
+                            loadAdminDashboardData(); // Reload UI if it failed
                         });
-                } else {
-                    renderAdminTable(allTrainees);
                 }
             }
         });
