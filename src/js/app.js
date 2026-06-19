@@ -32,11 +32,24 @@ const LocalDB = {
         if (!list.includes(code)) {
             list.push(code);
             this.saveWhitelist(list);
+            
+            // Sincronizar con Firebase si está activo
+            if (isFirebaseActive && db) {
+                db.collection("config").doc("whitelist").set({ codes: list })
+                    .catch(err => console.error("Error al guardar lista blanca en Firebase:", err));
+            }
         }
     },
     removeWhitelist: function(code) {
         const list = this.getWhitelist();
-        this.saveWhitelist(list.filter(c => c !== code));
+        const newList = list.filter(c => c !== code);
+        this.saveWhitelist(newList);
+        
+        // Sincronizar con Firebase si está activo
+        if (isFirebaseActive && db) {
+            db.collection("config").doc("whitelist").set({ codes: newList })
+                .catch(err => console.error("Error al eliminar de lista blanca en Firebase:", err));
+        }
     },
     getTrainees: function() {
         const data = localStorage.getItem('scc_trainees');
@@ -121,7 +134,31 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSidebarNav();
     setupEventListeners();
     updateFirebaseStatusIndicator();
+    syncWhitelistFromFirebase();
 });
+
+// Sincronizar lista blanca desde Firebase al iniciar
+function syncWhitelistFromFirebase() {
+    if (isFirebaseActive && db) {
+        db.collection("config").doc("whitelist").get()
+            .then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    if (data && Array.isArray(data.codes)) {
+                        LocalDB.saveWhitelist(data.codes);
+                        
+                        const adminView = document.getElementById('admin-view');
+                        if (adminView && adminView.classList.contains('active')) {
+                            renderWhitelistAdmin();
+                        }
+                    }
+                }
+            })
+            .catch((error) => {
+                console.error("Error al sincronizar lista blanca desde Firebase:", error);
+            });
+    }
+}
 
 // Comprobar si hay un usuario logueado en la sesión
 function checkAppSession() {
@@ -359,12 +396,10 @@ function setupEventListeners() {
             const whitelist = LocalDB.getWhitelist();
             const errorMsg = document.getElementById('login-error-msg');
             
+            // Si la lista blanca tiene elementos, validar que el código esté en ella.
+            // Si está vacía, se asume acceso libre (cualquier alumno puede registrarse).
             if (whitelist.length > 0 && !whitelist.includes(nif)) {
                 errorMsg.innerText = '❌ Acceso denegado: Código no autorizado.';
-                errorMsg.style.display = 'block';
-                return;
-            } else if (whitelist.length === 0) {
-                errorMsg.innerText = '❌ Acceso denegado: Lista de accesos vacía. Contacte al administrador.';
                 errorMsg.style.display = 'block';
                 return;
             }
