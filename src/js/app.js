@@ -12,12 +12,13 @@ let isFirebaseActive = false;
 
 // Intentar cargar la configuración de Firebase (usar la predeterminada si no hay una personalizada)
 try {
+    const firebaseEnabled = localStorage.getItem('scc_firebase_enabled') !== 'false'; // Predeterminado true
     const savedConfig = localStorage.getItem('scc_firebase_config');
     if (savedConfig) {
         firebaseConfig = JSON.parse(savedConfig);
     }
     
-    if (firebaseConfig && firebaseConfig.apiKey) {
+    if (firebaseEnabled && firebaseConfig && firebaseConfig.apiKey) {
         // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
@@ -642,6 +643,7 @@ function setupEventListeners() {
         }
 
         const useFirebase = document.getElementById('toggle-firebase').checked;
+        localStorage.setItem('scc_firebase_enabled', useFirebase ? 'true' : 'false');
         if (useFirebase) {
             try {
                 const configText = document.getElementById('setting-firebase-config').value.trim();
@@ -655,10 +657,8 @@ function setupEventListeners() {
             }
         } else {
             localStorage.removeItem('scc_firebase_config');
-            if (isFirebaseActive) {
-                alert("Firebase desactivado. La página se recargará para volver al almacenamiento local.");
-                location.reload();
-            }
+            alert("Firebase desactivado. La página se recargará para volver al almacenamiento local.");
+            location.reload();
         }
 
         document.getElementById('settings-modal').classList.remove('active');
@@ -686,9 +686,9 @@ function setupEventListeners() {
                 loadModule(currentModuleIndex + 1);
             } else {
                 if (!result.answeredAll) {
-                    alert("Por favor, responde todas las 5 preguntas antes de continuar.");
+                    alert(`Por favor, responde todas las ${result.total} preguntas antes de continuar.`);
                 } else {
-                    alert(`Has obtenido ${result.score} de ${result.total}. Necesitas al menos 4 para avanzar. Las preguntas se han reiniciado. ¡Inténtalo de nuevo!`);
+                    alert(`Has obtenido ${result.score} de ${result.total}. Necesitas al menos ${result.required} para avanzar. Las preguntas se han reiniciado. ¡Inténtalo de nuevo!`);
                     renderCheckpoint(modules[currentModuleIndex].checkpoints); // Reset questions
                 }
             }
@@ -759,22 +759,9 @@ function exportTraineesToCSV() {
 // Cargar configuraciones guardadas en el modal
 function loadSettingsConfig() {
     document.getElementById('setting-admin-pass').value = LocalDB.getAdminPassword();
-    const hasConfig = localStorage.getItem('scc_firebase_config');
-    document.getElementById('toggle-firebase').checked = !!hasConfig;
-    document.getElementById('firebase-config-area').style.display = hasConfig ? 'block' : 'none';
-    
-    if (hasConfig) {
-        document.getElementById('setting-firebase-config').value = JSON.stringify(JSON.parse(hasConfig), null, 2);
-    } else {
-        document.getElementById('setting-firebase-config').value = `{
-  "apiKey": "TU_API_KEY",
-  "authDomain": "TU_PROJECT_ID.firebaseapp.com",
-  "projectId": "TU_PROJECT_ID",
-  "storageBucket": "TU_PROJECT_ID.appspot.com",
-  "messagingSenderId": "TU_SENDER_ID",
-  "appId": "TU_APP_ID"
-}`;
-    }
+    document.getElementById('toggle-firebase').checked = isFirebaseActive;
+    document.getElementById('firebase-config-area').style.display = isFirebaseActive ? 'block' : 'none';
+    document.getElementById('setting-firebase-config').value = JSON.stringify(firebaseConfig, null, 2);
 }
 
 // Indicator de estado de Firebase en el pie de página
@@ -944,11 +931,11 @@ function loadModule(index) {
 
 // Comprobar si el alumno ya respondió correctamente el checkpoint del módulo actual
 function checkCheckpointScore() {
-    if (!modules[currentModuleIndex].checkpoints) return { passed: true, score: 5, total: 5 };
+    if (!modules[currentModuleIndex].checkpoints) return { passed: true, score: 5, total: 5, required: 0 };
     
     const threshold = ((currentModuleIndex + 1) / modules.length) * 100;
     if (currentUser.progress >= threshold - 1) {
-        return { passed: true, score: 5, total: 5 }; // Already passed previously
+        return { passed: true, score: 5, total: 5, required: 0 }; // Already passed previously
     }
     
     const container = document.getElementById('checkpoint-container');
@@ -966,10 +953,12 @@ function checkCheckpointScore() {
         }
     });
     
+    const required = Math.ceil(cards.length * 0.8);
     return { 
-        passed: correctCount >= 4, 
+        passed: correctCount >= required, 
         score: correctCount, 
         total: cards.length,
+        required: required,
         answeredAll: answeredCount === cards.length
     };
 }
@@ -998,7 +987,7 @@ function renderCheckpoint(checkpoints) {
         
         const header = document.createElement('div');
         header.className = 'objective-header';
-        header.innerHTML = `<span class="objective-icon">🎯</span> <h4>Pregunta ${idx + 1} de 5</h4>`;
+        header.innerHTML = `<span class="objective-icon">🎯</span> <h4>Pregunta ${idx + 1} de ${selected.length}</h4>`;
         card.appendChild(header);
 
         const questionP = document.createElement('p');
@@ -1398,8 +1387,9 @@ function downloadDiplomaImage() {
 
 // Reiniciar curso en caso de reprobar
 function restartCourse() {
-    // Mantener la sesión iniciada pero restablecer progreso y nota en base de datos
-    saveProgress(0, null, false);
+    // Mantener la sesión iniciada y el progreso al 100% (para no bloquear los módulos), 
+    // pero restablecer la calificación del examen para poder reintentarlo.
+    saveProgress(100, null, false);
     currentModuleIndex = 0;
     showView('dashboard-view');
     loadModule(0);
